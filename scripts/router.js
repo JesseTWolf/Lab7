@@ -40,7 +40,6 @@ router.setState = function(state) {
   const body = document.querySelector("body");
   const title = document.querySelector("header h1");
 
-  console.log('test' + state.page);
   // Home state where it displays everything "normally". All journal entries and everything.
   if (state.page === 'home' || state.page === null) {
     
