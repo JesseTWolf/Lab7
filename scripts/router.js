@@ -5,7 +5,7 @@ export const router = {};
 /**
  * Changes the "page" (state) that your SPA app is currently set to
  */
-router.setState = function() {
+router.setState = function(state) {
   /**
    * - There are three states that your SPA app will have
    *    1. The home page
@@ -35,4 +35,44 @@ router.setState = function() {
    *    1. You may add as many helper functions in this file as you like
    *    2. You may modify the parameters of setState() as much as you like
    */
+
+  // Store the body and header so that we can change the body as well as the overall title of the page easily.
+  const body = document.querySelector("body");
+  const title = document.querySelector("header h1");
+
+  console.log('test' + state.page);
+  // Home state where it displays everything "normally". All journal entries and everything.
+  if (state.page === 'home' || state.page === null) {
+    
+    body.className = '';
+    title.innerHTML = 'Journal Entries';
+    // console.log(location.origin);
+
+    history.pushState({page: 'home'}, '', location.origin);
+  
+  } else if (state.page === 'settings') {  // Settings state (just a placeholder for where a settings page would go.)
+    
+    body.className = 'settings';
+    title.innerHTML = 'Setting';
+
+    
+    history.pushState({page: 'settings'}, '', '#settings');
+  
+  } else if (state.page === 'entry') { // Entry page (shows one individual entry after you click on a specific entry.)
+
+    // Need to clear out the template from the screen when we transition over.
+    body.removeChild(document.querySelector('entry-page'));
+
+    title.innerHTML = 'Entry ' + state.number;
+    body.className = 'single-entry';
+
+    // Create newEntry and make it's entry equal to the state's. 
+    let currentEntry = document.createElement('entry-page');
+
+    currentEntry.entry = state.entryActual;
+
+    body.appendChild(currentEntry);
+
+    history.pushState({page: 'entry'}, '', '#entry' + state.number);
+  }
 }

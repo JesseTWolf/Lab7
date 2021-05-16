@@ -14,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let newPost = document.createElement('journal-entry');
         newPost.entry = entry;
         newPost.number = count;
+        newPost.id = 'entry' + count;
         newPost.addEventListener('click', () => {
-          setState({page: 'entry', number: newPost.number})
+          setState({page: 'entry', number: newPost.number, 'entryActual': entry});
         });
         document.querySelector('main').appendChild(newPost);
         count++;
@@ -28,10 +29,20 @@ const title = document.querySelector("header h1");
 
 // If the user clicks on the settings icon we should go to settings.
 settings.addEventListener('click', () => {
-  setState({page: 'settings'});
+  router.setState({page: 'settings'});
 });
 
 // If the user clicks on the title we should return to homepage. 
 title.addEventListener('click', () => {
-  setState({page: 'home'});
+  router.setState({page: 'home'});
+});
+
+// Back button functionality.
+// onpopstate is fired when the active history entry changes while the user navigates the session history.
+window.addEventListener('popstate', (event) => {
+  if(history.state !== null ) {
+    router.setState(history.state);
+  } else {
+    router.setState({page: 'home'}, '', ' ');
+  }
 });
