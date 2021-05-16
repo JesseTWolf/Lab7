@@ -46,7 +46,6 @@ router.setState = function(state) {
     
     body.className = '';
     title.innerHTML = 'Journal Entries';
-    // console.log(location.origin);
 
     history.pushState({page: 'home'}, '', location.origin);
   
