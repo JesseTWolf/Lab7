@@ -7,7 +7,13 @@
 
 // Registration of the service worker is completed within the script.js file.
 
-// Setup the cache name and definte the urls that will be cached.
+
+// Event listener for activation ( check out MDN's clients.claim() for this step )
+self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim());
+});
+
+// Setup the cache name and define the urls that will be cached.
 var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
   './index.html',
@@ -33,7 +39,6 @@ self.addEventListener('install', function(event) {
 
 // Event listener for fetch requests
 self.addEventListener('fetch', function(event) {
-    console.log('Within fetch');
     event.respondWith(
       caches.match(event.request)
         .then(function(response) {
@@ -47,8 +52,15 @@ self.addEventListener('fetch', function(event) {
     );
   });
 
-// Event listener for activation ( check out MDN's clients.claim() for this step )
-self.addEventListener('activate', event => {
-    event.waitUntil(clients.claim());
-  });
-  
+  // Register the service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').then(function(registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function(err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
